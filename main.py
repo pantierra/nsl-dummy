@@ -2,6 +2,8 @@
 
 import sys
 import json
+import uuid
+
 
 from nsl.stac import StacRequest, FloatFilter, GeometryData, ProjectionData
 from nsl.stac.client import NSLClient
@@ -32,8 +34,12 @@ def main():
             gsd=FloatFilter(rel_type=GT, value=0.14),
     )
 
+    correlation_id = f"up42+{uuid.uuid4()}"
+    print(f"Correlation ID for this search: {correlation_id}")
+
     try:
-        response = nsl_client.search(request)
+        response = nsl_client.search(request, correlation_id=correlation_id)
+
     except Exception as e:
         print(f"An error occurred during search: {e}")
         sys.exit(1)
